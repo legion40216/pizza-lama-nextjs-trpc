@@ -55,16 +55,19 @@ export default function LoginForm() {
       });
 
       if (result.error) {
-        toast.error(result.error.message || 'Invalid credentials');
+        toast.error(result.error.message || "Invalid credentials");
       } else if (result.data?.user) {
         toast.success(toastSuccess);
         router.refresh();
       }
-    } catch (error: any) {
-      console.error('Login error:', error);
-      toast.error(error.message || 'Something went wrong!');
-    } finally {
-      toast.dismiss(toastId);
+    } catch (error: unknown) {
+      console.error("Login error:", error);
+
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error("Something went wrong!");
+      }
     }
   };
 
@@ -137,11 +140,8 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter className="flex justify-center">
         <p className="text-sm text-gray-600">
-          Don't have an account yet?{" "}
-          <Link 
-          href="register" 
-          className="text-primary hover:underline"
-          >
+          Don&apos;t have an account yet?{" "}
+          <Link href="register" className="text-primary hover:underline">
             Sign up
           </Link>
         </p>

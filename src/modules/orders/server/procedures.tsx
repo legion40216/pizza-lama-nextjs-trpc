@@ -3,7 +3,6 @@ import prisma from "@/lib/prismadb";
 import { orderDataSchema } from "@/schemas";
 import {
   createTRPCRouter,
-  baseProcedure,
   protectedProcedure,
 } from "@/trpc/init";
 import { TRPCError } from "@trpc/server";
@@ -241,7 +240,7 @@ export const ordersRouter = createTRPCRouter({
       }
 
       try {
-        const order = await prisma.order.update({
+        await prisma.order.update({
           where: { id: input.id },
           data: { isPaid: input.isPaid },
         });

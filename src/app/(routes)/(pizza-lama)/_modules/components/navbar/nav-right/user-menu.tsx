@@ -44,7 +44,7 @@ export default function UserMenu() {
       return pathname?.startsWith(route.href + "/");
     });
     setActiveLink(matchedRoute?.href || null);
-  }, [pathname]);
+  }, [pathname,allRoutes]);
 
   return (
     <>

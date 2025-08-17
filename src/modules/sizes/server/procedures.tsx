@@ -72,7 +72,7 @@ export const sizesRouter = createTRPCRouter({
       }
 
       try {
-        const size = await prisma.size.create({
+        await prisma.size.create({
           data: {
             title: input.title,
             value: input.value,

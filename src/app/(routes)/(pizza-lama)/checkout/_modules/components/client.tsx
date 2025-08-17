@@ -62,7 +62,7 @@ type TransformedOrder = {
 export default function MultiStepCheckout() {
   const { items, removeAll } = useCart();
   const [step, setStep] = useState<Step>(STEP_FLOW[0]);
-  const [isOrderPlaced, setIsOrderPlaced] = useState<Boolean>(false);
+  const [isOrderPlaced, setIsOrderPlaced] = useState<boolean>(false);
   const [confirmedOrderData, setConfirmedOrderData] = useState<any>(null);
   const [paymentMethod, setPaymentMethod] = useState<"stripe" | "cod"> ("stripe");
 

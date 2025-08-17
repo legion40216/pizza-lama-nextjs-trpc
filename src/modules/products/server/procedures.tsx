@@ -207,7 +207,7 @@ export const productsRouter = createTRPCRouter({
         const { id, sizes, ...productData } = input;
         const priceDecimal = new Decimal(productData.price);
 
-        const product = await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx) => {
           // Update the product - use the id from input, not productData.id
           const updatedProduct = await tx.product.update({
             where: {

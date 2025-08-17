@@ -63,9 +63,13 @@ export default function RegisterForm() {
           redirect("/login");
         }, 1000);
       }
-    } catch (error: any) {
-      toast.error(error.message || "Something went wrong!");
-    } finally {
+    } catch (error: unknown) {
+  if (error instanceof Error) {
+    toast.error(error.message || "Something went wrong!");
+  } else {
+    toast.error("Something went wrong!");
+  }
+} finally {
       toast.dismiss(toastId);
     }
   };

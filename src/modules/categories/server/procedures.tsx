@@ -119,7 +119,7 @@ export const categoriesRouter = createTRPCRouter({
       }
 
       try {
-        const category = await prisma.category.create({
+        await prisma.category.create({
           data: {
             title: input.title,
             descr: input.descr,
@@ -161,7 +161,7 @@ export const categoriesRouter = createTRPCRouter({
       }
 
       try {
-        const category = await prisma.category.update({
+        await prisma.category.update({
           where: {
             id: input.id,
           },
