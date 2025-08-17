@@ -18,8 +18,16 @@ function getQueryClient() {
 }
 
 function getUrl() {
-  return process.env.NEXT_PUBLIC_TRPC_URL ?? 'http://localhost:3000/api/trpc';
+  if (typeof window !== 'undefined') {
+    // client-side (browser)
+    return process.env.NEXT_PUBLIC_TRPC_URL ?? '/api/trpc';
+  }
+  // server-side (SSR, SSG, ISR, build time)
+  return process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}/api/trpc`
+    : 'http://localhost:3000/api/trpc';
 }
+
 
 export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
