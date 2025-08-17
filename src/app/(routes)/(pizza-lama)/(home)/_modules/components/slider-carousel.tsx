@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/carousel";
 
 import { Button } from "@/components/ui/button";
-import { useCurrentUser } from "@/hooks/client-auth-utils";
 
 export function SliderCarousel() {
   const sliders = [

@@ -8,7 +8,7 @@ import { checkAccess } from "@/utils/checkAccess";
 
 import EmptyState from "@/components/global-ui/empty-state";
 import OrdersView from "./view/orders-view";
-
+export const dynamic = 'force-static';
 export default async function Page() {
   const access = await checkAccess({ 
     allowedRoles: [UserRole.ADMIN, UserRole.MODERATOR]
