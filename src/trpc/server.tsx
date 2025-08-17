@@ -30,11 +30,107 @@ export const trpc = {
         queryKey: ['products', 'getAll'],
         queryFn: async () => {
           const ctx = await createTRPCContext();
-          // Call the router directly without HTTP
           return appRouter.createCaller(ctx).products.getAll();
         },
       }),
     },
+    getById: {
+      queryOptions: ({ productId }: { productId: string }) => ({
+        queryKey: ['products', 'getById', productId],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).products.getById({ productId });
+        },
+      }),
+    },
   },
-  // Add other procedures as needed following the same pattern
+  categories: {
+    getAll: {
+      queryOptions: () => ({
+        queryKey: ['categories', 'getAll'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).categories.getAll();
+        },
+      }),
+    },
+    getBySlug: {
+      queryOptions: ({ categorySlug }: { categorySlug: string }) => ({
+        queryKey: ['categories', 'getBySlug', categorySlug],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).categories.getBySlug({ categorySlug });
+        },
+      }),
+    },
+    getById: {
+      queryOptions: ({ categoryId }: { categoryId: string }) => ({
+        queryKey: ['categories', 'getById', categoryId],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).categories.getById({ categoryId });
+        },
+      }),
+    },
+  },
+  orders: {
+    getAll: {
+      queryOptions: () => ({
+        queryKey: ['orders', 'getAll'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).orders.getAll();
+        },
+      }),
+    },
+    getAllByUserId: {
+      queryOptions: () => ({
+        queryKey: ['orders', 'getAllByUserId'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).orders.getAllByUserId();
+        },
+      }),
+    },
+  },
+  sizes: {
+    getAll: {
+      queryOptions: () => ({
+        queryKey: ['sizes', 'getAll'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).sizes.getAll();
+        },
+      }),
+    },
+    getById: {
+      queryOptions: ({ sizeId }: { sizeId: string }) => ({
+        queryKey: ['sizes', 'getById', sizeId],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).sizes.getById({ sizeId });
+        },
+      }),
+    },
+  },
+  users: {
+    getAll: {
+      queryOptions: () => ({
+        queryKey: ['users', 'getAll'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).users.getAll();
+        },
+      }),
+    },
+    getCurrentById: {
+      queryOptions: () => ({
+        queryKey: ['users', 'getCurrentById'],
+        queryFn: async () => {
+          const ctx = await createTRPCContext();
+          return appRouter.createCaller(ctx).users.getCurrentById();
+        },
+      }),
+    },
+  },
 };
