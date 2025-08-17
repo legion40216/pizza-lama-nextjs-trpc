@@ -8,9 +8,17 @@ import HomeView from "./_modules/views/home-view";
 export default async function Page() {
 
   const queryClient = getQueryClient();
-  await queryClient.prefetchQuery(
-    trpc.products.getAll.queryOptions()
-  );
+  
+  // Wrap in try-catch to handle build-time failures gracefully
+  try {
+    await queryClient.prefetchQuery(
+      trpc.products.getAll.queryOptions()
+    );
+  } catch (error) {
+    // During build time, this might fail - that's okay
+    // The client-side will fetch the data when needed
+    console.warn('Failed to prefetch data during build:', error);
+  }
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
