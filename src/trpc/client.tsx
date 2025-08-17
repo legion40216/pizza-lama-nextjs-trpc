@@ -18,9 +18,9 @@ function getQueryClient() {
 }
 
 function getUrl() {
-  // During build time, use a placeholder URL or skip HTTP calls
-  if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
-    return 'http://localhost:3000/api/trpc'; // This won't be called during build
+  // Always use the environment variable if available
+  if (process.env.NEXT_PUBLIC_TRPC_URL) {
+    return process.env.NEXT_PUBLIC_TRPC_URL;
   }
   
   // For client-side, use the current window location
@@ -28,8 +28,18 @@ function getUrl() {
     return `${window.location.origin}/api/trpc`;
   }
   
-  // Fallback for development
-  return process.env.NEXT_PUBLIC_TRPC_URL ?? 'http://localhost:3000/api/trpc';
+  // For server-side during development
+  if (process.env.NODE_ENV === 'development') {
+    return 'http://localhost:3000/api/trpc';
+  }
+  
+  // Fallback for production builds using Vercel URL
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}/api/trpc`;
+  }
+  
+  // Final fallback
+  return 'http://localhost:3000/api/trpc';
 }
 
 export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
@@ -40,6 +50,18 @@ export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
         httpBatchLink({
           url: getUrl(),
           transformer: superjson,
+          // Add headers for server-side requests
+          headers: () => {
+            const headers: Record<string, string> = {};
+            
+            // Forward important headers during SSR
+            if (typeof window === 'undefined') {
+              // You can add authentication headers here if needed
+              // headers.authorization = ...
+            }
+            
+            return headers;
+          },
         }),
       ],
     })
