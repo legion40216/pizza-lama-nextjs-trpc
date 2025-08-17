@@ -2,7 +2,7 @@ import { currentUser } from '@/hooks/server-auth-utils'
 import { UserRole } from '@/data/data'
 
 interface AccessOptions {
-  allowedRoles?: UserRole[]; // optional — if not passed, only checks authentication
+  allowedRoles?: UserRole[];
 }
 
 export async function checkAccess(options?: AccessOptions) {

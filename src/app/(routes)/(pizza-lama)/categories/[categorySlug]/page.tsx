@@ -5,7 +5,8 @@ import CategoryView from './_modules/views/category-view';
 interface PageProps {
   params: Promise<{ categorySlug: string }>;
 }
-export const dynamic = 'force-static';
+
+
 export default async function Page({ params }: PageProps) {
   const { categorySlug } = await params;
 

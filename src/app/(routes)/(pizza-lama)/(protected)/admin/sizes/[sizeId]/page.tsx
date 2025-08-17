@@ -14,7 +14,7 @@ interface PageProps {
     sizeId: string;
   }>;
 }
-export const dynamic = 'force-static';
+
 export default async function EditSizePage({ params }: PageProps) {
   const { sizeId } = await params;
   

@@ -14,7 +14,7 @@ interface PageProps {
     productId: string;
   }>;
 }
-export const dynamic = 'force-static';
+
 export default async function EditProductPage({ params }: PageProps) {
   const { productId } = await params;
 

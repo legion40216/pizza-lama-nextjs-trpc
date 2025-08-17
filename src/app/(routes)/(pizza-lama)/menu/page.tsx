@@ -2,7 +2,6 @@ import { getQueryClient, trpc } from '@/trpc/server';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import MenuView from './_modules/views/menu-view';
 
-export const dynamic = 'force-static';
 export default async function Page() {
 
   const queryClient = getQueryClient();
