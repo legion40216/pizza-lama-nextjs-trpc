@@ -18,16 +18,19 @@ function getQueryClient() {
 }
 
 function getUrl() {
-  if (typeof window !== 'undefined') {
-    // client-side (browser)
-    return process.env.NEXT_PUBLIC_TRPC_URL ?? '/api/trpc';
+  // During build time, use a placeholder URL or skip HTTP calls
+  if (typeof window === 'undefined' && process.env.NODE_ENV === 'production') {
+    return 'http://localhost:3000/api/trpc'; // This won't be called during build
   }
-  // server-side (SSR, SSG, ISR, build time)
-  return process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}/api/trpc`
-    : 'http://localhost:3000/api/trpc';
+  
+  // For client-side, use the current window location
+  if (typeof window !== 'undefined') {
+    return `${window.location.origin}/api/trpc`;
+  }
+  
+  // Fallback for development
+  return process.env.NEXT_PUBLIC_TRPC_URL ?? 'http://localhost:3000/api/trpc';
 }
-
 
 export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
@@ -36,7 +39,7 @@ export function TRPCReactProvider({ children }: { children: React.ReactNode }) {
       links: [
         httpBatchLink({
           url: getUrl(),
-          transformer: superjson, // ✅ moved here
+          transformer: superjson,
         }),
       ],
     })
