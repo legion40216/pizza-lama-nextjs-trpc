@@ -3,6 +3,9 @@ import Brandname from './nav-main/brandname'
 
 export default function NavMain() {
   return (
-    <Brandname/>
+    <div  className='hidden sm:block'>
+      <Brandname/>
+    </div>
+    
   )
 }

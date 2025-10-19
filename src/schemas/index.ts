@@ -1,5 +1,5 @@
 //schemas/index.ts
-import { UserRole } from "@/data/data";
+import { UserRole, UserRoleRegistertion } from "@/data/data";
 import * as z from "zod"
 
 //Form schemas
@@ -18,6 +18,9 @@ export const registerSchema = z.object({
     name: z.string().min(1, "Name is required"),
     email: z.email("Invalid email address"),
     password: z.string().min(8, "Password must be at least 8 characters"),
+    role: z.enum(UserRoleRegistertion , {
+        message: "Please select an account type",
+    }),
 });
 
 export type RoleRegisterFormValues = z.infer<typeof roleRegisterSchema>;
@@ -33,7 +36,7 @@ export const productSchema = z.object({
   title: z.string().min(1, "Title is required"),
   descr: z.string().min(1, "Description is required"),
   imgSrc: z.string().min(1, "Image is required"),
-  price: z.string().min(1, "Base price is required"), // This becomes base price for reference
+  price: z.string().min(1, "Base price is required"),
   isFeatured: z.boolean(),
   isArchived: z.boolean(),
   isNew: z.boolean(),

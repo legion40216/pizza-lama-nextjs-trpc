@@ -52,8 +52,8 @@ export default function OrderSummary({
         className="space-y-2"
         >
           <div className="flex items-center space-x-2">
-            <RadioGroupItem value="stripe" id="stripe" />
-            <Label htmlFor="stripe">Pay with Stripe</Label>
+            <RadioGroupItem value="stripe" id="stripe" disabled={true}/>
+            <Label htmlFor="stripe">Pay with Stripe *Coming soon</Label>
           </div>
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="cod" id="cod" />

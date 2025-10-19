@@ -4,6 +4,11 @@ export enum UserRole {
     MODERATOR = "MODERATOR",
 }
 
+export enum UserRoleRegistertion {
+    USER = "USER",
+    MODERATOR = "MODERATOR",
+}
+
 export enum OrderStatus {
     PENDING = "PENDING",
     DELIVERED = "DELIVERED",

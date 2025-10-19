@@ -25,7 +25,7 @@ export default function Logout() {
       {isPending ? (
         <Button
           className="bg-pizza-store-primary 
-              hover:bg-pizza-store-primary/90"
+        hover:bg-pizza-store-primary/90"
           disabled={isPending}
         >
           <span className="animate-pulse">Loading...</span>
@@ -42,7 +42,6 @@ export default function Logout() {
               <Link href="/login">Logout</Link>
             </Button>
           ) : (
-            <>
               <Button
                 asChild
                 className="bg-pizza-store-primary 
@@ -50,7 +49,6 @@ export default function Logout() {
               >
                 <Link href="/login">Login</Link>
               </Button>
-            </>
           )}
         </>
       )}

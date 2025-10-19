@@ -4,9 +4,11 @@ import Footer from "./_modules/components/footer";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="grid grid-rows-[min-content_1fr_min-content] space-y-4">
-      <header className="container mx-auto">
-        <nav className="w-[calc(100%-2rem)] mx-auto">
+    <div className="grid grid-rows-[min-content_1fr_min-content]
+    space-y-4"
+    >
+      <header className="">
+        <nav className="">
           <Navbar />
         </nav>
       </header>

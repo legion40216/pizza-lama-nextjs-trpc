@@ -102,8 +102,14 @@ const CategorySectionContent = ({categorySlug}: categorySlugProps) => {
 
               <Button className="bg-pizza-store-primary 
               hover:bg-pizza-store-primary/90 text-white"
+              asChild
               >
-                Add to Cart
+                <Link 
+                href={`/products/${item.id}`} 
+                className="block"
+                >
+                  Add to Cart
+                </Link>
               </Button>
             </div>
           </div>

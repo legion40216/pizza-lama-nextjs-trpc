@@ -17,12 +17,12 @@ export const auth = betterAuth({
         type: 'string',
         required: false,
         defaultValue: 'USER',
-        input: true,  // ✅ This allows users to set role during registration
+        input: true,
       },
     },
   },
   session: {
-    updateAge: 60 * 60 * 24,       // refresh every 24 hours
-    expiresIn: 60 * 60 * 24 * 7,   // expire session after 7 days
+    updateAge: 60 * 60 * 24,       
+    expiresIn: 60 * 60 * 24 * 7,
   },
 });

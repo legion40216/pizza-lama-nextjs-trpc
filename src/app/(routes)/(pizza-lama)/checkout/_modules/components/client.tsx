@@ -64,7 +64,7 @@ export default function MultiStepCheckout() {
   const [step, setStep] = useState<Step>(STEP_FLOW[0]);
   const [isOrderPlaced, setIsOrderPlaced] = useState<boolean>(false);
   const [confirmedOrderData, setConfirmedOrderData] = useState<any>(null);
-  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "cod"> ("stripe");
+  const [paymentMethod, setPaymentMethod] = useState<"stripe" | "cod"> ("cod");
 
   const form = useForm<CustomerInfoFormValues>({
     resolver: zodResolver(customerInfoSchema),
@@ -83,6 +83,7 @@ export default function MultiStepCheckout() {
   const isFirst = currentIndex === 0;
   const isLast = currentIndex === STEP_FLOW.length - 1;
   const isSecondLast = currentIndex === STEP_FLOW.length - 2;
+  
   const itemsLenghtZero = items.length === 0 ? true : false;
 
   // Check if cart is empty

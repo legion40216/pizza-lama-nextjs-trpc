@@ -18,23 +18,23 @@ export type formattedDataProps = {
 };
 
 export type initialDataProps = {
-    id: string;
-    title: string;
-    descr: string;
-    imgSrc: string;
+  id: string;
+  title: string;
+  descr: string;
+  imgSrc: string;
+  price: string;
+  isFeatured: boolean;
+  isArchived: boolean;
+  isNew: boolean;
+  inStock: boolean;
+  discount: number;
+  catSlug: string;
+  stock: number;
+  sizes: {
+    sizeId: string;
     price: string;
-    isFeatured: boolean;
-    isArchived: boolean;
-    isNew: boolean;
-    inStock: boolean;
-    discount: number;
-    catSlug: string;
     stock: number;
-    sizes: {
-      sizeId: string;
-      price: string;
-      stock: number;
-    }[];
+  }[];
 };
 
 type ClientProps = {

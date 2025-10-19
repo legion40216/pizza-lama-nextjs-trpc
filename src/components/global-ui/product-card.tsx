@@ -26,7 +26,7 @@ export default function ProductCard({
         group-hover:ring-pizza-store-primary"
         >
           {/* Product Image Container */}
-          <div className="relative w-full aspect-square">
+          <div className="relative aspect-square">
             <Image 
             src={image} 
             alt={title} 

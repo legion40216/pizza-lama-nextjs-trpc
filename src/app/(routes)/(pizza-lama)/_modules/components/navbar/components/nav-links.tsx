@@ -6,11 +6,12 @@ import Link from "next/link";
 interface NavLinksProps {
   routeActive: boolean;
   routeHref: string;
-  routeLabel?: string; // optional now
-  children?: ReactNode; // allow anything to be passed
+  routeLabel?: string;
+  children?: ReactNode;
   className?: string;
   activeClassName?: string;
   inactiveClassName?: string;
+  onClick?: () => void;
 }
 
 export default function NavLinks({
@@ -21,10 +22,12 @@ export default function NavLinks({
   className,
   activeClassName = "",
   inactiveClassName = "",
+  onClick,
 }: NavLinksProps) {
   return (
     <Link
       href={routeHref}
+      onClick={onClick}
       className={cn(
         routeActive ? activeClassName : inactiveClassName,
         "transition-colors",
@@ -35,4 +38,3 @@ export default function NavLinks({
     </Link>
   );
 }
-

@@ -29,6 +29,8 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Button } from '@/components/ui/button'
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { UserRoleRegistertion } from '@/data/data'
 
 export default function RegisterForm() {
   const form = useForm({
@@ -37,6 +39,7 @@ export default function RegisterForm() {
       name: "",
       email: "",
       password: "",
+      role: UserRoleRegistertion.USER,
     },
     mode: "onChange",
   });
@@ -46,12 +49,13 @@ export default function RegisterForm() {
   const toastLoading = "Creating your account..."
   const toastSuccess = "Registration successful! Please log in.";
   const onSubmit = async (values: RegisterFormValues) => {
-    const toastId = toast.loading(toastLoading );
+    const toastId = toast.loading(toastLoading);
     try {
       const result = await signUp.email({
         email: values.email,
         password: values.password,
         name: values.name,
+        role: values.role,
       });
 
       if (result.error) {
@@ -64,19 +68,23 @@ export default function RegisterForm() {
         }, 1000);
       }
     } catch (error: unknown) {
-  if (error instanceof Error) {
-    toast.error(error.message || "Something went wrong!");
-  } else {
-    toast.error("Something went wrong!");
-  }
-} finally {
+      if (error instanceof Error) {
+        toast.error(error.message || "Something went wrong!");
+      } else {
+        toast.error("Something went wrong!");
+      }
+    } finally {
       toast.dismiss(toastId);
     }
   };
 
+  const roleOptions = Object.values(UserRoleRegistertion).map((role) => ({
+    value: role,
+    label: role,
+  }));
 
   return (
-    <Card className="w-full max-w-md">
+    <Card className="w-full sm:max-w-md">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription>Create an account to get started</CardDescription>
@@ -147,13 +155,49 @@ export default function RegisterForm() {
                   </FormItem>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="role"
+                render={({ field }) => (
+                  <FormItem className="space-y-3">
+                    <div className="flex justify-between">
+                      <FormLabel>Account Type</FormLabel>
+                      <FormMessage />
+                    </div>
+                    <FormControl>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        className="flex flex-col space-y-2"
+                        disabled={isSubmitting}
+                      >
+                        {
+                          roleOptions.map((opt) => (
+                            <FormItem 
+                              key={opt.value} 
+                              className="flex items-center space-x-3 space-y-0">
+                              <FormControl>
+                                <RadioGroupItem value={opt.value} />
+                              </FormControl>
+                              <FormLabel className="font-normal cursor-pointer">
+                                {opt.label.charAt(0) + opt.label.slice(1).toLowerCase()}
+                              </FormLabel>
+                            </FormItem>
+                          )) 
+                        }
+                      </RadioGroup>
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
             </div>
             
             <div className="space-y-3">
               <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isSubmitting}>
+                type="submit" 
+                className="w-full" 
+                disabled={isSubmitting}>
                 {isSubmitting ? "Registering..." : "Register"}
               </Button>
             </div>

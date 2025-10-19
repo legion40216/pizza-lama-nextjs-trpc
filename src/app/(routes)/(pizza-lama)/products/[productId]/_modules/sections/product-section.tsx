@@ -59,14 +59,15 @@ const ProductSectionContent = ({ productId }: ProductIdProps) => {
     <div className="min-h-[calc(100vh-241px)] grid place-item-center">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Image */}
-        <div className="flex items-center justify-center">
-          <div className="relative aspect-square w-[70%]">
+          <div className="relative aspect-square">
             <Image
               src={formattedProduct.image}
               alt={formattedProduct.title}
               fill
               className="object-cover"
             />
+
+            {/* New Badge */}
             <>
             {formattedProduct.isNew &&
             <Badge className="absolute top-2 right-2 z-20 
@@ -79,7 +80,6 @@ const ProductSectionContent = ({ productId }: ProductIdProps) => {
             }
             </>
           </div>
-        </div>
 
         {/* Details */}
         <div className="flex justify-center md:items-center md:justify-start">
@@ -94,6 +94,7 @@ const ProductSectionContent = ({ productId }: ProductIdProps) => {
               </h1>
               <p className="text-muted-foreground">{formattedProduct.description}</p>
             </div>
+
             {/* Product Action */}
               <ProductDetails  
                 id={formattedProduct.id}

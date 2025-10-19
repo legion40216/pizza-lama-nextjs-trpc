@@ -69,6 +69,9 @@ export default function LoginForm() {
         toast.error("Something went wrong!");
       }
     }
+    finally {
+      toast.dismiss(toastId);
+    }
   };
 
   return (

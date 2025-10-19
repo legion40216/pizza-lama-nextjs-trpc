@@ -6,7 +6,7 @@ import Logout from "./nav-right/logout";
 
 export default function NavRight() {
   return (
-    <div className="flex gap-3 items-center">
+    <div className="flex gap-1 items-center">
       <Logout />
 
       <UserMenu />

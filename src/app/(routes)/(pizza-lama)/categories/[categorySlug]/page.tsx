@@ -6,7 +6,6 @@ interface PageProps {
   params: Promise<{ categorySlug: string }>;
 }
 
-
 export default async function Page({ params }: PageProps) {
   const { categorySlug } = await params;
 
