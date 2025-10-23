@@ -56,15 +56,17 @@ const ProductSectionContent = ({ productId }: ProductIdProps) => {
   }
 
   return (
-    <div className="min-h-[calc(100vh-241px)] grid place-item-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div className="grid place-item-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Image */}
-          <div className="relative aspect-square">
+        <div className='relative h-[300px] md:flex md:flex-col md:flex-1 md:min-h-[300px] lg:min-h-[350px]'>
+                    <div className="w-full h-full relative cursor-pointer"
+          >
             <Image
               src={formattedProduct.image}
               alt={formattedProduct.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
 
             {/* New Badge */}
@@ -80,9 +82,11 @@ const ProductSectionContent = ({ productId }: ProductIdProps) => {
             }
             </>
           </div>
+        </div>
+
 
         {/* Details */}
-        <div className="flex justify-center md:items-center md:justify-start">
+        <div className="flex flex-col justify-center">
           <div className="space-y-4">
             {/* Title and Description */}
             <div className="space-y-2">

@@ -23,6 +23,8 @@ export type ProductProps = {
   }[];
 };
 
+type PizzaSize = "Small" | "Medium" | "Large";
+
 export default function ProductDetails({
   id,
   title,
@@ -37,49 +39,13 @@ export default function ProductDetails({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const { items, addItem, getItemCount, updateItemCount, removeItem } = useCart();
+  const {items, addItem, getItemCount, updateItemCount, removeItem} = useCart();
   
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [cartQuantity, setCartQuantity] = useState(0);
-
-  // Get selected size from URL params or default
-  const selectedSize = useMemo((): "Small" | "Medium" | "Large" | null => {
-    const sizeFromUrl = searchParams.get("size") as "Small" | "Medium" | "Large" | null;
-    // If no sizes available, return null
-    if (sizes.length === 0) {
-      return null;
-    }
-    
-    // If size from URL is valid, use it
-    if (sizeFromUrl && sizes.some(size => size.label === sizeFromUrl)) {
-      return sizeFromUrl;
-    }
-    
-    // Default to first available size
-    return sizes[0]?.label || null;
-  }, [searchParams, sizes]);
-
-  // Initialize URL with default size if needed
-  useEffect(() => {
-    if (sizes.length > 0 && !searchParams.get("size")) {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set("size", sizes[0].label);
-      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-    }
-  }, [sizes, searchParams, pathname, router]);
-
-  // Update cart quantities when selectedSize changes
-  useEffect(() => {
-    const currentCartQuantity = getItemCount(id, selectedSize);
-    setCartQuantity(currentCartQuantity);
-    setSelectedQuantity(currentCartQuantity > 0 ? currentCartQuantity : 1);
-  }, [id, items, selectedSize, getItemCount]);
-
-  const handleSizeChange = (size: "Small" | "Medium" | "Large") => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("size", size);
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
-  };
+  
+  // Local state for optimistic UI updates
+  const [selectedSize, setSelectedSize] = useState<PizzaSize | null>(null);
 
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity < 1) {
@@ -90,9 +56,81 @@ export default function ProductDetails({
     setSelectedQuantity(newQuantity);
 
     if (cartQuantity > 0) {
-      updateItemCount(id, selectedSize, newQuantity);
+      updateItemCount(id, activeSize, newQuantity);
     }
   };
+
+  // Handle adding/removing items from cart
+  const handleCartAction = () => {
+    if (cartQuantity > 0) {
+      removeItem(id, activeSize);
+    } else {
+      addItem(
+        {
+          id,
+          title,
+          image,
+          description,
+          discount,
+          inStock,
+          selectedSize: activeSize,
+          price: finalPrice.final,
+          sizes: sizes.map((size) => ({
+            ...size,
+            priceModifier: Number(size.priceModifier),
+          })),
+        },
+        selectedQuantity
+      );
+    }
+  };
+
+  // Handle size selection with optimistic update
+  const handleSizeChange = (size: PizzaSize) => {
+    // Instant UI update
+    setSelectedSize(size);
+
+    // Update URL in background
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("size", size);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  // Compute active size (prioritize local state for instant feedback)
+  const activeSize = useMemo((): PizzaSize | null => {
+    // Use local state first (optimistic update)
+    if (selectedSize) return selectedSize;
+    
+    // Fallback to URL
+    const sizeFromUrl = searchParams.get("size") as PizzaSize | null;
+    
+    // No sizes available
+    if (sizes.length === 0) return null;
+    
+    // Valid URL size
+    if (sizeFromUrl && sizes.some((size) => size.label === sizeFromUrl)) {
+      return sizeFromUrl;
+    }
+    
+    // Default to first size
+    return sizes[0]?.label || null;
+  }, [selectedSize, searchParams, sizes]);
+
+  // Initialize URL with default size on mount
+  useEffect(() => {
+    if (sizes.length > 0 && !searchParams.get("size")) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("size", sizes[0].label);
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    }
+  }, [sizes, searchParams, pathname, router]);
+
+  // Update cart quantities when activeSize changes
+  useEffect(() => {
+    const currentCartQuantity = getItemCount(id, activeSize);
+    setCartQuantity(currentCartQuantity);
+    setSelectedQuantity(currentCartQuantity > 0 ? currentCartQuantity : 1);
+  }, [id, items, activeSize, getItemCount]);
 
   // Calculate final price based on selected size and discount
   const finalPrice = useMemo(() => {
@@ -104,9 +142,9 @@ export default function ProductDetails({
     let finalWithoutDiscount = 0;
 
     // Only apply size modifier if sizes exist and a size is selected
-    if (sizes.length > 0 && selectedSize) {
+    if (sizes.length > 0 && activeSize) {
       const selectedSizeData = sizes.find(
-        (size) => size.label === selectedSize
+        (size) => size.label === activeSize
       );
 
       if (selectedSizeData) {
@@ -131,32 +169,7 @@ export default function ProductDetails({
       final,
       finalWithoutDiscount
     };
-  }, [selectedSize, price, discount, sizes]);
-
-  // Handle adding/removing items from cart
-  const handleCartAction = () => {
-    if (cartQuantity > 0) {
-      removeItem(id, selectedSize);
-    } else {
-      addItem(
-        {
-          id,
-          title,
-          image,
-          description,
-          discount,
-          inStock,
-          selectedSize,
-          price: finalPrice.final,
-          sizes: sizes.map((size) => ({
-            ...size,
-            priceModifier: Number(size.priceModifier),
-          })),
-        },
-        selectedQuantity
-      );
-    }
-  };
+  }, [activeSize, price, discount, sizes]);
 
   return (
     <div>
@@ -197,14 +210,14 @@ export default function ProductDetails({
           {sizes.map((size) => (
             <Button
               key={size.label}
-              disabled={selectedSize === size.label}
-              onClick={() => handleSizeChange(size.label)}
+              disabled={activeSize === size.label}
+              onClick={() => handleSizeChange(size.label as PizzaSize)}
               className={`${
-                selectedSize === size.label
+                activeSize === size.label
                   ? "bg-pizza-store-primary text-white hover:bg-pizza-store-primary/90 border border-pizza-store-primary"
                   : "text-pizza-store-primary border border-pizza-store-primary hover:text-pizza-store-primary"
               }`}
-              variant={selectedSize === size.label ? "default" : "outline"}
+              variant={activeSize === size.label ? "default" : "outline"}
               size="sm"
             >
               {size.label}
@@ -216,7 +229,7 @@ export default function ProductDetails({
       {/* Quantity & Cart */}
       <div className="flex flex-col sm:flex-row justify-start gap-4 mt-4">
         {/* Quantity Selector */}
-        <div className="flex items-center border rounded-md w-max">
+        <div className="flex items-center border rounded-md justify-between">
           <Button
             className="text-pizza-store-primary 
             hover:text-pizza-store-primary"
@@ -244,7 +257,7 @@ export default function ProductDetails({
         {/* Add to Cart Button */}
         <Button
           className="bg-pizza-store-primary 
-          hover:bg-pizza-store-primary/90 flex-1"
+          hover:bg-pizza-store-primary/90 flex-1 md:max-w-[55%]"
           onClick={handleCartAction}
           disabled={!inStock}
           variant={cartQuantity > 0 ? "destructive" : "default"}

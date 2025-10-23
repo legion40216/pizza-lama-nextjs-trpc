@@ -7,7 +7,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
     <div className="grid grid-rows-[min-content_1fr_min-content]
     space-y-4"
     >
-      <header className="">
+      <header className="container mx-auto">
         <nav className="">
           <Navbar />
         </nav>
